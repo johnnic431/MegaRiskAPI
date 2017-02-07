@@ -1,0 +1,2 @@
+# MegaRiskAPI
+Mega Risk API

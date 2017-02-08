@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 
 public class UserDatabase {
@@ -58,23 +59,33 @@ public class UserDatabase {
 			throw new RuntimeException("users could not be saved");
 		}
 	}
-	public static boolean processLogin(String user,String pass){
+	public static User processLogin(String user,String pass){
 		
 		for(User u:users){
 			LoginCredentials lc=u.getLCs();
 			if(lc.getUserName().equals(user)){ // we have the correct username, cannot be more than one
 				
 				if(lc.isPasswordEqual(pass)){
-					return true;
+					return u;
 				}
 				
-				return false;
+				return null;
 			}
 		}
 		
-		return false;
+		return null;
 	}
 	
+	public static String getLoginToken(User u) {
+		if(u.getCurrentAuthToken()!=null)
+			return u.getCurrentAuthToken();
+		SecureRandom sr=new SecureRandom();
+		byte[] at=new byte[32];
+		sr.nextBytes(at);
+		u.setCurrentAuthToken(new String(at));
+		return u.getCurrentAuthToken();
+	}
+
 	public static boolean isUserNameAvailable(String unm){
 		
 		for(User u:users){
@@ -82,6 +93,15 @@ public class UserDatabase {
 				return false;
 		}
 		
+		return true;
+	}
+
+	public static boolean addUser(User u) {
+		for(User us:users){
+			if(us.getLCs().getUserName().equals(u.getLCs().getUserName())||u.getName().equals(us.getName()))
+				return false;
+		}
+		users.add(u);
 		return true;
 	}
 }

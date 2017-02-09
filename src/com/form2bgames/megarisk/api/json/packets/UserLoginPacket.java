@@ -21,8 +21,7 @@ public class UserLoginPacket implements JSONPacket {
 	}
 
 	@Override
-	public boolean processJSONPayload(NetClient nc, String payload) {
-		Ason as=new Ason(payload);
+	public boolean processJSONPayload(NetClient nc,Ason as) {
 		String unm=as.getString("data.USER_S.AUTH1.username");
 		String hashPass=as.getString("data.USER_S.AUTH1.hashPass");
 		User u=UserDatabase.processLogin(unm, hashPass);

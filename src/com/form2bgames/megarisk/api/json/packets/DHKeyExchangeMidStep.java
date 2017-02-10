@@ -16,7 +16,7 @@ public class DHKeyExchangeMidStep implements JSONPacket {
 		HashMap<String,Object> datas=new HashMap<String,Object>();
 		nc.rc2iv8=Encryption.generateRC2IV();
 		datas.put("RC2_IV8", new String(nc.rc2iv8));
-		nc.encryptionFinished=true;
+		nc.encryptionOnNextStep=true;
 		JSONBuilder jsb=new JSONBuilder();
 		return jsb.getJSON(getPacketTypeHandle(), new DataSet(getPacketTypeHandle(),null,datas));
 	}
@@ -31,7 +31,6 @@ public class DHKeyExchangeMidStep implements JSONPacket {
 
 	@Override
 	public String getPacketTypeHandle() {
-		// TODO Auto-generated method stub
 		return "DH_KEY_XCHG_MIDSTEP";
 	}
 

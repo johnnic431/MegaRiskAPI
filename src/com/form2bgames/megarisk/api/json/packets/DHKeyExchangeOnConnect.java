@@ -13,7 +13,7 @@ public class DHKeyExchangeOnConnect implements JSONPacket{
 	@Override
 	public String getJSONPayload(NetClient nc) {
 		HashMap<String,Object> datas=new HashMap<String,Object>();
-		BigInteger baseNum=new BigInteger(new Integer(new java.util.Random().nextInt(30)+2).toString());
+		BigInteger baseNum=new BigInteger(new Integer(new java.util.Random().nextInt(2556)+758).toString());
 		datas.put("publicSeed", baseNum.toString());
 		nc.modPrime=getRandomPrime();
 		datas.put("publicMod", nc.modPrime.toString());
@@ -36,10 +36,13 @@ public class DHKeyExchangeOnConnect implements JSONPacket{
 	}
 	
 	private static BigInteger getRandomPrime(){
-		
-		BigInteger test=new BigInteger(new Integer(new java.util.Random().nextInt(64513)+1023).toString());
-		while (!test.isProbablePrime(99))
-			test = test.add(new BigInteger("1"));
-		return test;		
+		try{
+			BigInteger test=new BigInteger(new Long((new java.util.Random().nextLong()/2L)+(Long.MAX_VALUE/2)).toString());
+			while (!test.isProbablePrime(99))
+				test = test.add(new BigInteger("1"));
+			return test;
+		}catch(Exception e){
+			return getRandomPrime();
+		}
 	}
 }

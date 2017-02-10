@@ -20,7 +20,8 @@ public class NetClient implements Runnable{
 	private BufferedWriter bw=null;
 	private BufferedReader br=null;
 	public byte[] rc2iv8;
-	public boolean encryptionFinished;
+	public boolean encryptionFinished=false;
+	public boolean encryptionOnNextStep=false;
 	public NetClient(Socket accept) {
 		if(accept==null)
 			return;
@@ -33,8 +34,10 @@ public class NetClient implements Runnable{
 		try {
 			String pkt=packet.getJSONPayload(this);
 			if(encryptionFinished){
-				pkt=Encryption.encrypt(Encryption.getnBitKey(symmetricKey.toString(), 16), rc2iv8, pkt);
+				pkt=Encryption.encrypt(Encryption.getnBitKey(symmetricKey.toString()), rc2iv8, pkt);
 			}
+			if(encryptionOnNextStep)
+				encryptionFinished=true;
 			bw.write(pkt);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -54,7 +57,7 @@ public class NetClient implements Runnable{
 			try {
 				String s=br.readLine();
 				if(encryptionFinished){
-					s=Encryption.decrypt(Encryption.getnBitKey(symmetricKey.toString(), 16), rc2iv8, s);
+					s=Encryption.decrypt(Encryption.getnBitKey(symmetricKey.toString()), rc2iv8, s);
 				}
 				Ason as=new Ason(s);
 				JSONPacket js=JSONNetworkProcessor.getAppropriateHandler(as.getString("packetType"));

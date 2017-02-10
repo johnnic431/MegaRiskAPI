@@ -31,15 +31,16 @@ public class Encryption {
 		sr.nextBytes(iv);
 		return iv;
 	}
-	public static byte[] getnBitKey(String key,int bits){
+	public static byte[] getnBitKey(String key){
 		BigInteger b=new BigInteger(key);
 		byte[] finalKey=new byte[16];
 		int count=0;
-		for(byte by:b.toByteArray()){
-			finalKey[count++]=by;
-		}
-		for(int c=count;c<16;c++){
-			finalKey[c]=(byte)(0x00);
+		while(count!=16){
+			for(byte by:b.toByteArray()){
+				finalKey[count++]=by;
+				if(count==16)
+					return finalKey;
+			}
 		}
 		return finalKey;
 	}

@@ -34,4 +34,8 @@ public class DHKeyExchangeMidStep implements JSONPacket {
 		return "DH_KEY_XCHG_MIDSTEP";
 	}
 
+	@Override
+	public boolean requiresClientAuthed(){
+		return false;
+	}
 }

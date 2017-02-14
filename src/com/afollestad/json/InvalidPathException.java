@@ -5,7 +5,12 @@ package com.afollestad.json;
  */
 public class InvalidPathException extends IllegalArgumentException {
 
-    InvalidPathException(String message) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -6876952740908702672L;
+
+	InvalidPathException(String message) {
         super(message);
     }
 }

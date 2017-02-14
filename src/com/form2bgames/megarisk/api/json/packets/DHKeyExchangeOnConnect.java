@@ -45,4 +45,9 @@ public class DHKeyExchangeOnConnect implements JSONPacket{
 			return getRandomPrime();
 		}
 	}
+
+	@Override
+	public boolean requiresClientAuthed(){
+		return false;
+	}
 }

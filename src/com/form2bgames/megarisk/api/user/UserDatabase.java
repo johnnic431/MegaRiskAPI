@@ -59,7 +59,7 @@ public class UserDatabase {
 			throw new RuntimeException("users could not be saved");
 		}
 	}
-	public static User processLogin(String user,String pass){
+public static User processLogin(String user,String pass){
 		
 		for(User u:users){
 			LoginCredentials lc=u.getLCs();
@@ -70,6 +70,17 @@ public class UserDatabase {
 				}
 				
 				return null;
+			}
+		}
+		
+		return null;
+	}
+
+	public static User processLogin(String loginToken){
+		
+		for(User u:users){
+			if(u.getCurrentAuthToken().equals(loginToken)){
+				return u;
 			}
 		}
 		

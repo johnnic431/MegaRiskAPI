@@ -60,7 +60,7 @@ class Util {
     @SuppressWarnings("unchecked")
     static <T> T newInstance(Class<?> cls,
                              Map<Class<?>, Constructor<?>> cache) {
-        final Constructor ctor = getDefaultConstructor(cls, cache);
+        final Constructor<?> ctor = getDefaultConstructor(cls, cache);
         try {
             return (T) ctor.newInstance();
         } catch (Throwable t) {
@@ -71,12 +71,13 @@ class Util {
     static Constructor<?> getDefaultConstructor(Class<?> cls,
                                                 Map<Class<?>, Constructor<?>> cache) {
         if (cache != null) {
-            Constructor ctor = cache.get(cls);
+            Constructor<?> ctor = cache.get(cls);
             if (ctor != null) return ctor;
         }
-        final Constructor[] constructorArray = cls.getDeclaredConstructors();
-        Constructor constructor = null;
-        for (Constructor ct : constructorArray) {
+        @SuppressWarnings("rawtypes")
+		final Constructor[] constructorArray = cls.getDeclaredConstructors();
+        Constructor<?> constructor = null;
+        for (Constructor<?> ct : constructorArray) {
             if (ct.getParameterTypes() != null && ct.getParameterTypes().length != 0)
                 continue;
             constructor = ct;
@@ -118,8 +119,9 @@ class Util {
     static boolean isList(Class<?> cls) {
         if (cls.equals(List.class))
             return true;
-        Class[] is = cls.getInterfaces();
-        for (Class i : is)
+        @SuppressWarnings("rawtypes")
+		Class[] is = cls.getInterfaces();
+        for (Class<?> i : is)
             if (i.equals(List.class))
                 return true;
         return false;

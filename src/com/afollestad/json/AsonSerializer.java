@@ -16,7 +16,7 @@ import static com.afollestad.json.Util.*;
 /**
  * @author Aidan Follestad (afollestad)
  */
-@SuppressWarnings({"unchecked", "WeakerAccess", "unused"}) class AsonSerializer {
+@SuppressWarnings({"unchecked", "unused"}) class AsonSerializer {
 
     private static AsonSerializer serializer;
     private final Map<Class<?>, Constructor<?>> constructorCacheMap;
@@ -60,9 +60,9 @@ import static com.afollestad.json.Util.*;
         }
     }
 
-    public AsonArray serializeArray(Object arrayObject) {
+    public AsonArray<Object> serializeArray(Object arrayObject) {
         if (arrayObject == null) {
-            return new AsonArray();
+            return new AsonArray<Object>();
         }
 
         Class<?> cls = arrayObject.getClass();
@@ -72,7 +72,7 @@ import static com.afollestad.json.Util.*;
             throw new IllegalArgumentException(cls.getName() + " is not an array type.");
         }
 
-        final AsonArray result = new AsonArray<>();
+        final AsonArray<Object> result = new AsonArray<>();
         final int length = Array.getLength(arrayObject);
         if (length == 0) return result;
 
@@ -88,7 +88,7 @@ import static com.afollestad.json.Util.*;
         return result;
     }
 
-    public AsonArray serializeList(List list) {
+    public AsonArray<Object> serializeList(List<?> list) {
         if (list == null || list.isEmpty()) {
             return new AsonArray<>();
         }
@@ -119,7 +119,7 @@ import static com.afollestad.json.Util.*;
         } else if (fieldValue.getClass().isArray()) {
             return serializeArray(fieldValue);
         } else if (isList(fieldValue.getClass())) {
-            return serializeList((List) fieldValue);
+            return serializeList((List<?>) fieldValue);
         } else {
             return serialize(fieldValue);
         }
@@ -160,10 +160,10 @@ import static com.afollestad.json.Util.*;
                     type == AsonArray.class) {
                 setFieldValue(field, newObject, ason.get(name));
             } else if (type.isArray()) {
-                AsonArray asonArray = ason.get(name);
+                AsonArray<?> asonArray = ason.get(name);
                 setFieldValue(field, newObject, deserializeArray(asonArray, type.getComponentType()));
             } else if (isList(type)) {
-                AsonArray asonArray = ason.get(name);
+                AsonArray<?> asonArray = ason.get(name);
             } else {
                 Ason asonObject = ason.get(name);
                 setFieldValue(field, newObject, deserialize(asonObject, type));
@@ -173,7 +173,7 @@ import static com.afollestad.json.Util.*;
         return newObject;
     }
 
-    public <T> T deserializeArray(AsonArray json, Class<T> cls) {
+    public <T> T deserializeArray(AsonArray<?> json, Class<T> cls) {
         if (json == null) {
             return null;
         } else if (cls == null) {
@@ -198,13 +198,13 @@ import static com.afollestad.json.Util.*;
                 }
                 Array.set(newArray, i, value);
             } else if (component.isArray()) {
-                AsonArray subArray = (AsonArray) json.get(i);
+                AsonArray<?> subArray = (AsonArray<?>) json.get(i);
                 Class<?> arrayComponent = component.getComponentType();
                 Array.set(newArray, i, deserializeArray(subArray, arrayComponent));
             } else if (isList(component)) {
-                AsonArray subArray = (AsonArray) json.get(i);
+                AsonArray<?> subArray = (AsonArray<?>) json.get(i);
                 if (subArray.isEmpty()) {
-                    Array.set(newArray, i, new ArrayList(0));
+                    Array.set(newArray, i, new ArrayList<Object>(0));
                 } else {
                     Class<?> listComponent = subArray.get(0).getClass();
                     Array.set(newArray, i, deserializeList(subArray, listComponent));
@@ -218,7 +218,7 @@ import static com.afollestad.json.Util.*;
         return newArray;
     }
 
-    public <T> List<T> deserializeList(AsonArray json, Class<T> cls) {
+    public <T> List<T> deserializeList(AsonArray<?> json, Class<T> cls) {
         if (json == null) {
             return null;
         } else if (cls == null) {

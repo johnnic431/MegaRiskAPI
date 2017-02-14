@@ -6,4 +6,5 @@ public final class APIInfo {
 	public static enum BuildType{
 		STABLE,BETA,ALPHA,RELEASE_CANDIDATE1,RELEASE_CANDIDATE2,RELEASE_CANDIDATE3,RELEASE_CANDIDATE4,RELEASE_CANDIDATE5
 	}
+	public static final String version=String.format("%d.%d.%d %s", MAJOR,MINOR,REVISION,buildType.toString());
 }

@@ -5,7 +5,12 @@ package com.afollestad.json;
  */
 public class InvalidJsonException extends IllegalArgumentException {
 
-    InvalidJsonException(String json, Exception inner) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -6007326757184662136L;
+
+	InvalidJsonException(String json, Exception inner) {
         super("Invalid JSON: " + json, inner);
     }
 }

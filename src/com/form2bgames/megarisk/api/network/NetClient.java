@@ -20,8 +20,7 @@ public class NetClient implements Runnable{
 	private BufferedWriter bw=null;
 	private BufferedReader br=null;
 	public byte[] rc2iv8;
-	public boolean encryptionFinished=false;
-	public boolean encryptionOnNextStep=false;
+	public boolean encryptionFinished=false,encryptionOnNextStep=false,clientIsVerified=false;
 	public NetClient(Socket accept) {
 		if(accept==null)
 			return;
@@ -61,8 +60,16 @@ public class NetClient implements Runnable{
 				}
 				Ason as=new Ason(s);
 				JSONPacket js=JSONNetworkProcessor.getAppropriateHandler(as.getString("packetType"));
-				if(js!=null)
-					js.processJSONPayload(this, as);
+				if(js.requiresClientAuthed()){
+					if(clientIsVerified){
+						if(js!=null)
+							js.processJSONPayload(this, as);
+					}
+				}else{
+					if(js!=null)
+						js.processJSONPayload(this, as);
+				}
+				
 			} catch (Exception e) {
 				Network.ncs.remove(this);
 				return;

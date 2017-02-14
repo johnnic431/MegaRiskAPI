@@ -7,4 +7,7 @@ public interface JSONPacket {
 	public String getJSONPayload(NetClient nc);
 	public boolean processJSONPayload(NetClient nc,Ason as);
 	public String getPacketTypeHandle();
+	public default boolean requiresClientAuthed(){
+		return true;
+	}
 }

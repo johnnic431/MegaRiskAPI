@@ -14,7 +14,7 @@ import static com.afollestad.json.Util.*;
 /**
  * @author Aidan Follestad (afollestad)
  */
-@SuppressWarnings({"WeakerAccess", "unused", "unchecked", "SameParameterValue"}) public class Ason {
+@SuppressWarnings({"unchecked"}) public class Ason {
 
     private JSONObject json;
     private AsonSerializer serializer;
@@ -69,11 +69,11 @@ import static com.afollestad.json.Util.*;
             } else if (value instanceof Ason) {
                 putInternal(intoArray, intoObject, key, ((Ason) value).toStockJson());
             } else if (value instanceof AsonArray) {
-                putInternal(intoArray, intoObject, key, ((AsonArray) value).toStockJson());
+                putInternal(intoArray, intoObject, key, ((AsonArray<?>) value).toStockJson());
             } else if (value.getClass().isArray()) {
                 putInternal(intoArray, intoObject, key, serializer.serializeArray((Object[]) value));
             } else if (isList(value.getClass())) {
-                putInternal(intoArray, intoObject, key, serializer.serializeList((List) value));
+                putInternal(intoArray, intoObject, key, serializer.serializeList((List<?>) value));
             } else {
                 putInternal(intoArray, intoObject, key, serializer.serialize(value));
             }
@@ -115,7 +115,7 @@ import static com.afollestad.json.Util.*;
         return get(key, (T) null);
     }
 
-    @SuppressWarnings("unchecked") public <T> T get(String key, T defaultValue) {
+    public <T> T get(String key, T defaultValue) {
         if (key == null)
             throw new IllegalArgumentException("Key cannot be null.");
         Object result;
@@ -130,7 +130,7 @@ import static com.afollestad.json.Util.*;
         } else if (result instanceof JSONObject) {
             result = new Ason((JSONObject) result);
         } else if (result instanceof JSONArray) {
-            result = new AsonArray((JSONArray) result);
+            result = new AsonArray<Object>((JSONArray) result);
         }
         try {
             return (T) result;
@@ -199,15 +199,15 @@ import static com.afollestad.json.Util.*;
         return get(key, (Ason) null);
     }
 
-    public AsonArray getJsonArray(String key) {
-        return get(key, (AsonArray) null);
+    public AsonArray<?> getJsonArray(String key) {
+        return get(key, (AsonArray<?>) null);
     }
 
     public <T> T get(String key, Class<T> cls) {
         return get(key, cls, null);
     }
 
-    @SuppressWarnings("Duplicates") public <T> T get(String key, Class<T> cls, T defaultValue) {
+    public <T> T get(String key, Class<T> cls, T defaultValue) {
         Object value = get(key, defaultValue);
         if (value == null) {
             return defaultValue;
@@ -323,11 +323,11 @@ import static com.afollestad.json.Util.*;
     }
 
     public static <T> AsonArray<T> serializeArray(Object object) {
-        return AsonSerializer.get().serializeArray(object);
+        return (AsonArray<T>) AsonSerializer.get().serializeArray(object);
     }
 
     public static <T> AsonArray<T> serializeList(List<T> object) {
-        return AsonSerializer.get().serializeList(object);
+        return (AsonArray<T>) AsonSerializer.get().serializeList(object);
     }
 
     //
@@ -340,7 +340,7 @@ import static com.afollestad.json.Util.*;
 
     public static <T> T deserialize(String json, Class<T> cls) {
         if (isJsonArray(json)) {
-            AsonArray ason = new AsonArray(json);
+            AsonArray<?> ason = new AsonArray<Object>(json);
             return AsonSerializer.get().deserializeArray(ason, cls);
         } else {
             Ason ason = new Ason(json);
@@ -352,7 +352,7 @@ import static com.afollestad.json.Util.*;
         return AsonSerializer.get().deserialize(json, cls);
     }
 
-    public static <T> T deserialize(AsonArray json, Class<T> cls) {
+    public static <T> T deserialize(AsonArray<?> json, Class<T> cls) {
         if (cls == null) {
             throw new IllegalArgumentException("cls parameter cannot be null.");
         } else if (!cls.isArray()) {
@@ -365,11 +365,11 @@ import static com.afollestad.json.Util.*;
     }
 
     public static <T> List<T> deserializeList(String json, Class<T> cls) {
-        AsonArray array = new AsonArray(json);
+        AsonArray<?> array = new AsonArray<Object>(json);
         return AsonSerializer.get().deserializeList(array, cls);
     }
 
-    public static <T> List<T> deserializeList(AsonArray json, Class<T> cls) {
+    public static <T> List<T> deserializeList(AsonArray<?> json, Class<T> cls) {
         return AsonSerializer.get().deserializeList(json, cls);
     }
 }

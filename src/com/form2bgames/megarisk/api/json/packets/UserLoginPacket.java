@@ -22,8 +22,8 @@ public class UserLoginPacket implements JSONPacket {
 
 	@Override
 	public boolean processJSONPayload(NetClient nc,Ason as) {
-		String unm=as.getString("data.USER_S.AUTH1.username");
-		String hashPass=as.getString("data.USER_S.AUTH1.hashPass");
+		String unm=as.getString("data.USER_LOGIN_CREDENTIALS_S.AUTH.rev1.username");
+		String hashPass=as.getString("data.USER_LOGIN_CREDENTIALS_S.AUTH.rev1.hashPass");
 		User u=UserDatabase.processLogin(unm, hashPass);
 		authToken=UserDatabase.getLoginToken(u);
 		nc.setUser(u);
@@ -34,7 +34,7 @@ public class UserLoginPacket implements JSONPacket {
 	@Override
 	public String getPacketTypeHandle() {
 		// TODO Auto-generated method stub
-		return "USER_S.AUTH1";
+		return "USER_LOGIN_CREDENTIALS_S.AUTH.rev1";
 	}
 
 }

@@ -3,7 +3,7 @@ package com.form2bgames.megarisk.api.json.packets;
 import com.afollestad.json.Ason;
 import com.form2bgames.megarisk.api.network.NetClient;
 
-public class EnsureValidKey implements JSONPacket {
+public class UserTokenLoginPacket implements JSONPacket {
 
 	@Override
 	public String getJSONPayload(NetClient nc) {
@@ -20,7 +20,7 @@ public class EnsureValidKey implements JSONPacket {
 	@Override
 	public String getPacketTypeHandle() {
 		// TODO Auto-generated method stub
-		return "AUTHKEY_IS_VALID";
+		return "LOGIN_USER_TOKEN";
 	}
 
 }

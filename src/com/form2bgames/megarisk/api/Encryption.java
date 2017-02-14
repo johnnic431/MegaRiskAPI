@@ -1,6 +1,9 @@
 package com.form2bgames.megarisk.api;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
 import javax.crypto.Cipher;
@@ -9,39 +12,58 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 
 public class Encryption {
-	public static String encrypt(byte[] key, byte[] iv, String unencrypted) throws Exception{
-		RC2ParameterSpec ivSpec = new RC2ParameterSpec(key.length*8, iv);
+	public static String encrypt(byte[] key, byte[] iv, String unencrypted) throws Exception {
+		RC2ParameterSpec ivSpec = new RC2ParameterSpec(key.length * 8, iv);
 		Cipher cipher = Cipher.getInstance("RC2/CBC/PKCS5Padding");
 		cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key, "RC2"), ivSpec);
 		byte[] encrypted = cipher.doFinal(unencrypted.getBytes());
 		return DatatypeConverter.printBase64Binary(encrypted);
 	}
-	
-	public static String decrypt(byte[] key, byte[] iv, String encrypted) throws Exception{
-		RC2ParameterSpec ivSpec = new RC2ParameterSpec(key.length*8, iv);
+
+	public static String decrypt(byte[] key, byte[] iv, String encrypted) throws Exception {
+		RC2ParameterSpec ivSpec = new RC2ParameterSpec(key.length * 8, iv);
 		Cipher cipher = Cipher.getInstance("RC2/CBC/PKCS5Padding");
 		cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(key, "RC2"), ivSpec);
 		byte[] decrypted = cipher.doFinal(DatatypeConverter.parseBase64Binary(encrypted));
-		
+
 		return new String(decrypted);
 	}
-	public static byte[] generateRC2IV(){
-		SecureRandom sr=new SecureRandom();
-		byte[] iv=new byte[8];
+
+	public static byte[] generateRC2IV() {
+		SecureRandom sr = new SecureRandom();
+		byte[] iv = new byte[8];
 		sr.nextBytes(iv);
 		return iv;
 	}
-	public static byte[] getnBitKey(String key){
-		BigInteger b=new BigInteger(key);
-		byte[] finalKey=new byte[16];
-		int count=0;
-		while(count!=16){
-			for(byte by:b.toByteArray()){
-				finalKey[count++]=by;
-				if(count==16)
+
+	public static byte[] getnBitKey(String key) {
+		BigInteger b = new BigInteger(key);
+		byte[] finalKey = new byte[16];
+		int count = 0;
+		while (count != 16) {
+			for (byte by : b.toByteArray()) {
+				finalKey[count++] = by;
+				if (count == 16)
 					return finalKey;
 			}
 		}
 		return finalKey;
+	}
+
+	public static String get_SHA_512_SecurePassword(String passwordToHash, String salt) {
+		String generatedPassword = null;
+		try {
+			MessageDigest md = MessageDigest.getInstance("SHA-512");
+			md.update(salt.getBytes("UTF-8"));
+			byte[] bytes = md.digest(passwordToHash.getBytes("UTF-8"));
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < bytes.length; i++) {
+				sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
+			}
+			generatedPassword = sb.toString();
+		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return generatedPassword;
 	}
 }

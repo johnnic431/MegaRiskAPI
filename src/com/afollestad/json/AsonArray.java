@@ -14,7 +14,7 @@ import static com.afollestad.json.Util.isPrimitive;
 /**
  * @author Aidan Follestad (afollestad)
  */
-@SuppressWarnings({"unchecked", "WeakerAccess", "unused"})
+@SuppressWarnings({"unchecked"})
 public class AsonArray<T> implements Iterable<T> {
 
     private final JSONArray array;
@@ -45,13 +45,13 @@ public class AsonArray<T> implements Iterable<T> {
             } else if (object instanceof Ason) {
                 insertObject = ((Ason) object).toStockJson();
             } else if (object instanceof AsonArray) {
-                insertObject = ((AsonArray) object).toStockJson();
+                insertObject = ((AsonArray<?>) object).toStockJson();
             } else if (object.getClass().isArray()) {
                 insertObject = AsonSerializer.get().serializeArray((Object[]) object);
-                if (insertObject != null) insertObject = ((AsonArray) insertObject).toStockJson();
+                if (insertObject != null) insertObject = ((AsonArray<?>) insertObject).toStockJson();
             } else if (isList(object.getClass())) {
-                insertObject = AsonSerializer.get().serializeList((List) object);
-                if (insertObject != null) insertObject = ((AsonArray) insertObject).toStockJson();
+                insertObject = AsonSerializer.get().serializeList((List<?>) object);
+                if (insertObject != null) insertObject = ((AsonArray<?>) insertObject).toStockJson();
             } else {
                 insertObject = AsonSerializer.get().serialize(object);
                 if (insertObject != null) insertObject = ((Ason) insertObject).toStockJson();
@@ -72,7 +72,7 @@ public class AsonArray<T> implements Iterable<T> {
             if (value instanceof JSONObject) {
                 value = new Ason((JSONObject) value);
             } else if (value instanceof JSONArray) {
-                value = new AsonArray((JSONArray) value);
+                value = new AsonArray<Object>((JSONArray) value);
             }
             return (T) value;
         } catch (ClassCastException e) {

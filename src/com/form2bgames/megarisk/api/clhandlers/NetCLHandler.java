@@ -1,4 +1,4 @@
-package com.form2bgames.megarisk.api.inputprocessor;
+package com.form2bgames.megarisk.api.clhandlers;
 
 import java.security.SecureRandom;
 
@@ -28,11 +28,49 @@ public class NetCLHandler implements CLHandler{
 			help();
 		else if(toHandle[1].equals("addcl"))
 			addcl(toHandle); //add client to verified clients
-		else if(toHandle[1].equals("refreshtoken"))
+		else if(toHandle[1].equals("refreshtoken")||toHandle[1].equals("refresh"))
 			refreshToken(toHandle);
 		else if(toHandle[1].equals("removecl"))
 			removeClient(toHandle);
+		else if(toHandle[1].equals("writedb"))
+			ClientDatabase.writeDB();
+		else if(toHandle[1].equals("status"))
+			status();
 	}
+
+	private void status() {
+		System.out.printf("+----Client----+----Token Generation Date----+\n");
+		for(Client c:ClientDatabase.getClients()){
+			System.out.printf("|%s|%s|\n",
+					center(getTruncatedString(c.getName(),14),14),
+					center(getTruncatedString(c.getTokenGenDate(),29),29));
+		}
+		System.out.printf("+--------------+-----------------------------+\n");
+	}
+
+	private String getTruncatedString(String inputString, int MAX_CHAR) {
+		int maxLength = (inputString.length() < MAX_CHAR)?inputString.length():MAX_CHAR;
+		return inputString.substring(0, maxLength);
+	}
+	
+	public static String center(String s, int size) {
+        return center(s, size, ' ');
+    }
+
+    public static String center(String s, int size, char pad) {
+        if (s == null || size <= s.length())
+            return s;
+
+        StringBuilder sb = new StringBuilder(size);
+        for (int i = 0; i < (size - s.length()) / 2; i++) {
+            sb.append(pad);
+        }
+        sb.append(s);
+        while (sb.length() < size) {
+            sb.append(pad);
+        }
+        return sb.toString();
+    }
 
 	private void removeClient(String[] toHandle) {
 		if(toHandle.length!=3){
@@ -104,7 +142,9 @@ public class NetCLHandler implements CLHandler{
 				+ 			"    addcl <clientname>\n"
 				+ 			"    --help display this message\n"
 				+ 			"    removecl <clientname>\n"
-				+ 			"    refreshtoken <clientname>\n");
+				+ 			"    (refreshtoken|refresh) <clientname>\n"
+				+ 			"    status\n"
+				+ 			"    writedb\n");
 	}
 
 }

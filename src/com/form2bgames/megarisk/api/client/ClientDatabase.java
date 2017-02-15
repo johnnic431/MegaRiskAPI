@@ -129,4 +129,9 @@ public class ClientDatabase {
 		}
 		
 	}
+
+	public static ArrayList<Client> getClients() {
+		// TODO Auto-generated method stub
+		return new ArrayList<Client>(clients);
+	}
 }

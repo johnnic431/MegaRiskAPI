@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import com.form2bgames.megarisk.api.cl.CLHandler;
+import com.form2bgames.megarisk.api.clhandlers.NetCLHandler;
 import com.form2bgames.megarisk.api.clhandlers.QuitHandler;
 
 public class CLInputProcessor {

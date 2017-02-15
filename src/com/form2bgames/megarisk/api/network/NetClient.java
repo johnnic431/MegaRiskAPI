@@ -9,7 +9,7 @@ import java.math.BigInteger;
 import java.net.Socket;
 
 import com.afollestad.json.Ason;
-import com.form2bgames.megarisk.api.Encryption;
+import com.form2bgames.megarisk.api.crypto.Encryption;
 import com.form2bgames.megarisk.api.inputprocessor.JSONNetworkProcessor;
 import com.form2bgames.megarisk.api.json.packets.JSONPacket;
 import com.form2bgames.megarisk.api.user.User;
@@ -33,7 +33,7 @@ public class NetClient implements Runnable{
 		try {
 			String pkt=packet.getJSONPayload(this);
 			if(encryptionFinished){
-				pkt=Encryption.encrypt(Encryption.getnBitKey(symmetricKey.toString()), rc2iv8, pkt);
+				pkt=Encryption.encrypt(Encryption.getKey(symmetricKey.toString()), rc2iv8, pkt);
 			}
 			if(encryptionOnNextStep)
 				encryptionFinished=true;
@@ -56,7 +56,7 @@ public class NetClient implements Runnable{
 			try {
 				String s=br.readLine();
 				if(encryptionFinished){
-					s=Encryption.decrypt(Encryption.getnBitKey(symmetricKey.toString()), rc2iv8, s);
+					s=Encryption.decrypt(Encryption.getKey(symmetricKey.toString()), rc2iv8, s);
 				}
 				Ason as=new Ason(s);
 				JSONPacket js=JSONNetworkProcessor.getAppropriateHandler(as.getString("packetType"));

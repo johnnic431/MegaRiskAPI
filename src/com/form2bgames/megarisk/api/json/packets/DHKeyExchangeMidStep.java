@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 import com.afollestad.json.Ason;
 import com.form2bgames.megarisk.api.DataSet;
-import com.form2bgames.megarisk.api.Encryption;
+import com.form2bgames.megarisk.api.crypto.Encryption;
 import com.form2bgames.megarisk.api.json.JSONBuilder;
 import com.form2bgames.megarisk.api.network.NetClient;
 

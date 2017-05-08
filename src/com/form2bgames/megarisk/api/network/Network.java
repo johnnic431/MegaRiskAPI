@@ -2,6 +2,7 @@ package com.form2bgames.megarisk.api.network;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
 
 public class Network implements Runnable{
@@ -9,7 +10,7 @@ public class Network implements Runnable{
 	public static ArrayList<NetClient> ncs=new ArrayList<NetClient>();
 	public Network(){
 		try {
-			ss=new ServerSocket(9427);
+			ss=new ServerSocket(8080);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -19,9 +20,12 @@ public class Network implements Runnable{
 	public void run() {
 		while(true){
 			try {
-				ncs.add(new NetClient(ss.accept()));
+				Socket s=ss.accept();
+				NetClient ncl=new NetClient(s);
+				ncs.add(ncl);
+				new Thread(ncl).start();
+				System.out.printf("New client connected! %s",s.getInetAddress().toString());
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

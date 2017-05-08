@@ -24,7 +24,7 @@ public class NetCLHandler implements CLHandler{
 	public void handleString(String[] toHandle) {
 		if(toHandle.length==1)
 			help();
-		else if(toHandle[1].equals("--help"))
+		else if(toHandle[1].equals("--help")||toHandle[1].equals("help"))
 			help();
 		else if(toHandle[1].equals("addcl"))
 			addcl(toHandle); //add client to verified clients
@@ -36,6 +36,8 @@ public class NetCLHandler implements CLHandler{
 			ClientDatabase.writeDB();
 		else if(toHandle[1].equals("status"))
 			status();
+		else
+			help();
 	}
 
 	private void status() {

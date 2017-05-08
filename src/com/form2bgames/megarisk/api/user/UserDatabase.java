@@ -115,4 +115,31 @@ public static User processLogin(String user,String pass){
 		users.add(u);
 		return true;
 	}
+
+	public static boolean confirmTokenIsUser(String authToken, User u) {
+		String nAuth=getLoginToken(u);
+		return nAuth.equals(authToken);
+	}
+	
+	public static User getUserByUsername(String name){
+		for(User u:users){
+			if(u.getLCs().getUserName().equals(name))
+				return u;
+		}
+		return null;
+	}
+	
+	public static User getUserByName(String name){
+		for(User u:users){
+			if(u.getName().equals(name))
+				return u;
+		}
+		return null;
+	}
+
+	public static ArrayList<User> getUsers() {
+		// TODO Auto-generated method stub
+		return users;
+	}
+	
 }

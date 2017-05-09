@@ -6,11 +6,13 @@ public class TroopType {
 	
 	private String name;
 	private ArrayList<TroopEffectivenessModifier> modifiers;
+	private ArrayList<RangeEffectivenessModifier> rangemodifiers;
 	
-	public TroopType(String namee, ArrayList<TroopEffectivenessModifier> modifierz) {
-		//basically just a container
+	public TroopType(String namee, ArrayList<TroopEffectivenessModifier> modifierz, float range, ArrayList<RangeEffectivenessModifier> rmodifierz) {
+		//basically just a container for the modifiers, to make things more convenient
 		modifiers = modifierz;
 		name = namee;
+		rangemodifiers = rmodifierz;
 	}
 	
 	public ArrayList<TroopEffectivenessModifier> getModifiers() {
@@ -22,5 +24,8 @@ public class TroopType {
 		return name;
 	}
 	
+	public ArrayList<RangeEffectivenessModifier> getRangeModifiers() {
+		return rangemodifiers;
+	}
 	
 }

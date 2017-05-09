@@ -17,6 +17,7 @@ public class MRAPIMain {
 			throw new RuntimeException("A console must be present");
 		}
 		new ConsoleThread().run();
+		System.out.printf("Version: %s\n",APIInfo.version);
 	}
 
 }

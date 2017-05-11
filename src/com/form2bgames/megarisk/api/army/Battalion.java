@@ -1,13 +1,15 @@
 package com.form2bgames.megarisk.api.army;
 
+import com.form2bgames.megarisk.api.game.PlayableEntity;
+
 public class Battalion {
 
 	private Troop troop;
-	private String owner;
+	private PlayableEntity owner;
 	private int amount;
 	private Position position;
 	
-	public Battalion(Troop troopp, String ownerr, Position positionn, int amountt) {
+	public Battalion(Troop troopp, PlayableEntity ownerr, Position positionn, int amountt) {
 		/*
 		this is a battalion, or some amount of a troop at some location with some owner
 		*/
@@ -21,7 +23,7 @@ public class Battalion {
 		return amount;
 	}
 	
-	public String getOwner() {
+	public PlayableEntity getOwner() {
 		return owner;
 	}
 	

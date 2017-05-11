@@ -3,6 +3,7 @@ package com.form2bgames.megarisk.api;
 import java.io.Console;
 
 import com.form2bgames.megarisk.api.client.ClientDatabase;
+import com.form2bgames.megarisk.api.game.GameWorld;
 import com.form2bgames.megarisk.api.network.Network;
 import com.form2bgames.megarisk.api.user.UserDatabase;
 
@@ -18,6 +19,10 @@ public class MRAPIMain {
 		}
 		new ConsoleThread().run();
 		System.out.printf("Version: %s\n",APIInfo.version);
+		GameWorld gw=new GameWorld();
+		
 	}
 
+	
+	
 }

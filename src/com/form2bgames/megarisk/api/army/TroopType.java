@@ -8,7 +8,7 @@ public class TroopType {
 	private ArrayList<TroopEffectivenessModifier> modifiers;
 	private ArrayList<RangeEffectivenessModifier> rangemodifiers;
 	
-	public TroopType(String namee, ArrayList<TroopEffectivenessModifier> modifierz, float range, ArrayList<RangeEffectivenessModifier> rmodifierz) {
+	public TroopType(String namee, ArrayList<TroopEffectivenessModifier> modifierz, ArrayList<RangeEffectivenessModifier> rmodifierz) {
 		//basically just a container for the modifiers, to make things more convenient
 		modifiers = modifierz;
 		name = namee;

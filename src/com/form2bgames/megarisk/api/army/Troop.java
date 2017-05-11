@@ -14,25 +14,26 @@ public class Troop {
 	private int cutoffnumber;
 	private float cuttoffscaleing;
 	private int cutoffgradient;
-	
+	private float range;
 		
-	public Troop(ArrayList<TroopType> typess, String namee, float healthperunitt, float attackperunitt, int cutoffnumberr, float cuttoffscaleingg, int cutoffgradientt) {
-		/*a lot to explain here. basically pass me your poor, your tired, and your hungry, and ill make it into a troop
-		but really here goes
-		types - basically a list of all types your troop has
-		name - i hope you can tell what this means
-		healthperunit - also hope this is obvious
-		attackperunit - ditto
-		cutoffnumber - number at which troops ATTACK (NOT defence!!!) will begin scaling based on...
-		cuttoffscaleing - % troop number is muliplied by when deciding attack strength
-		cutoffgradient - number at which minimum troop efficiency is reached
-		*/
+	/**
+	 * @param typess basically a list of all types your troop has
+	 * @param namee i hope you can tell what this means
+	 * @param healthperunitt also hope this is obvious
+	 * @param attackperunitt ditto
+	 * @param rangee range in km
+	 * @param cutoffnumberr number at which troops ATTACK (NOT defence!!!) will begin scaling based on...
+	 * @param cuttoffscaleingg % troop number is muliplied by when deciding attack strength
+	 * @param cutoffgradientt number at which minimum troop efficiency is reached
+	 */
+	public Troop(ArrayList<TroopType> typess, String namee, float healthperunitt, float attackperunitt,float rangee, int cutoffnumberr, float cuttoffscaleingg, int cutoffgradientt) {
 		types = typess;
 		healthperunit = healthperunitt;
 		attackperunit = attackperunitt;
 		cutoffnumber = cutoffnumberr;
 		cuttoffscaleing = cuttoffscaleingg;
 		cutoffgradient = cutoffgradientt;
+		range = rangee;
 	}
 
 	public ArrayList<TroopType> getTypes() {
@@ -47,6 +48,13 @@ public class Troop {
 		return name;
 	}
 	
+	/*
+	|------------|--------------|-------------
+	0           cut            grad
+	 linear         psuedo        linear
+	 				quadratic
+	*/
+	
 	public float getUnmodifiedAttack(int numberofunits) {
 		if (numberofunits <= cutoffnumber) {
 			return numberofunits*attackperunit;
@@ -54,7 +62,9 @@ public class Troop {
 		else {
 			int scalednumber = numberofunits-cutoffnumber;
 			float attack = cutoffnumber*attackperunit;
-			float scaleing = 1-((1-cuttoffscaleing)*(scalednumber/(cutoffgradient-cutoffnumber)));
+			float scaleing = 1-
+					((1-cuttoffscaleing)
+					*(scalednumber/(cutoffgradient-cutoffnumber))	);
 			if (scaleing < cuttoffscaleing) {
 				attack += cuttoffscaleing*scalednumber;
 			}
@@ -64,5 +74,11 @@ public class Troop {
 			return attack;
 		}
 	}
+
+	public float getRange() {
+		return range;
+	}
+	
+	//public getRange
 	
 }
